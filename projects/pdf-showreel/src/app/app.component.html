@@ -1,0 +1,4 @@
+<h1>PDF Editor</h1>
+
+<input type="file" #file hidden (change)="openEditor($event.files[0])">
+<button (click)="file.click()"></button>

@@ -3,5 +3,166 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "ngx-pdf-editor": {
+      "projectType": "library",
+      "root": "projects/ngx-pdf-editor",
+      "sourceRoot": "projects/ngx-pdf-editor/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ngx-pdf-editor/tsconfig.lib.json",
+            "project": "projects/ngx-pdf-editor/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ngx-pdf-editor/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-pdf-editor/src/test.ts",
+            "tsConfig": "projects/ngx-pdf-editor/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-pdf-editor/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-pdf-editor/tsconfig.lib.json",
+              "projects/ngx-pdf-editor/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "pdf-showreel": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/pdf-showreel",
+      "sourceRoot": "projects/pdf-showreel/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/pdf-showreel",
+            "index": "projects/pdf-showreel/src/index.html",
+            "main": "projects/pdf-showreel/src/main.ts",
+            "polyfills": "projects/pdf-showreel/src/polyfills.ts",
+            "tsConfig": "projects/pdf-showreel/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/pdf-showreel/src/favicon.ico",
+              "projects/pdf-showreel/src/assets"
+            ],
+            "styles": [
+              "projects/pdf-showreel/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/pdf-showreel/src/environments/environment.ts",
+                  "with": "projects/pdf-showreel/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "pdf-showreel:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "pdf-showreel:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "pdf-showreel:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/pdf-showreel/src/test.ts",
+            "polyfills": "projects/pdf-showreel/src/polyfills.ts",
+            "tsConfig": "projects/pdf-showreel/tsconfig.spec.json",
+            "karmaConfig": "projects/pdf-showreel/karma.conf.js",
+            "assets": [
+              "projects/pdf-showreel/src/favicon.ico",
+              "projects/pdf-showreel/src/assets"
+            ],
+            "styles": [
+              "projects/pdf-showreel/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/pdf-showreel/tsconfig.app.json",
+              "projects/pdf-showreel/tsconfig.spec.json",
+              "projects/pdf-showreel/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/pdf-showreel/e2e/protractor.conf.js",
+            "devServerTarget": "pdf-showreel:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "pdf-showreel:serve:production"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ngx-pdf-editor"
 }
