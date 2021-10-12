@@ -1,0 +1,51 @@
+<div class="flex w-full h-full p-0">
+
+    <div class="w-2/5 h-full border-r border-solid flex flex-col pr-2 space-y-4" #toolside>
+        <h2 class="text-lg font-semibold">{{editorConfig.title}}</h2>
+        <mat-accordion class="w-full">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        File Information
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="flex flex-col">
+
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="flex flex-row">
+            <div class="w-20 h-20 shadow-sm border border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer"
+                [ngClass]="{'bg-gray-100 hover:bg-gray-50' : editor.selectedTool?.id === editor.tools[toolKey].id, 'hover:bg-gray-100' : editor.selectedTool?.id !== editor.tools[toolKey].id}"
+                *ngFor="let toolKey of getEditorToolsArray()" (click)="toggleTool(editor.tools[toolKey])">
+                <mat-icon class="text-3xl w-auto h-auto">{{editor.tools[toolKey].icon}}</mat-icon>
+                <p class="text-lg">{{editor.tools[toolKey].name}}</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="w-3/5 h-full flex flex-col pl-2" #pdfside>
+        <pdf-viewer *ngIf="pdfToEdit" [src]="pdfToEdit" [render-text]="true" [original-size]="true" [fit-to-page]="true"
+            [show-all]="false" (page-rendered)="pageRendered($event)" [(page)]="selectedPage"
+            (after-load-complete)="pdfRenderCompleted = true" class="block w-full h-full relative"></pdf-viewer>
+
+        <div class="flex flex-row h-10 items-center justify-center border-t border-solid border-gray-200 pt-1"
+            *ngIf="pdfRenderCompleted">
+            <mat-icon class="text-3xl cursor-pointer opacity-75 hover:opacity-100 h-full" (click)="previousPage()">
+                chevron_left</mat-icon>
+            <p class="font-semibold text-2xl ml-2">{{selectedPage}}/{{pages.length}}</p>
+            <mat-icon class="text-3xl cursor-pointer opacity-75 hover:opacity-100 h-full" (click)="nextPage()">
+                chevron_right
+            </mat-icon>
+        </div>
+    </div>
+
+
+</div>
+
+<ng-template cdk-portal #textStyleEditor="cdkPortal">
+    <div class="flex flex-row w-full h-full items-center">
+        Size:<input type="number" [value]="" class="border" (input)="updateTextSize($event.target)">
+    </div>
+</ng-template>

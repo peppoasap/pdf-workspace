@@ -1,0 +1,18 @@
+.pdfViewer .page{
+    border: 1px solid !important;
+    box-sizing: content-box !important;
+}
+
+.pdfElement{
+    position: absolute;
+    padding: 8px;
+}
+
+.pdfElement:hover{
+    cursor: grab;
+}
+
+.textElement[contenteditable="true"]:hover{
+    cursor: text !important;
+}
+

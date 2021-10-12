@@ -1,4 +1,8 @@
-<h1>PDF Editor</h1>
+<div class="p-5 space-y-4 bg-gray-200 h-screen">
+    <h1 class="text-red-700 text-2xl font-semibold">PDF Editor</h1>
 
-<input type="file" #file hidden (change)="openEditor($event.files[0])">
-<button (click)="file.click()"></button>
+    <input type="file" #file hidden (change)="openEditor($event)">
+    <button (click)="file.click()" class="bg-red-300 shadow-md p-4 text-lg rounded-sm">Carica file</button>
+
+    <button (click)="openEditor()" class="bg-red-300 shadow-md p-4 text-lg rounded-sm">Apri Editor</button>
+</div>

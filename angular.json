@@ -62,7 +62,6 @@
             "main": "projects/pdf-showreel/src/main.ts",
             "polyfills": "projects/pdf-showreel/src/polyfills.ts",
             "tsConfig": "projects/pdf-showreel/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/pdf-showreel/src/favicon.ico",
               "projects/pdf-showreel/src/assets"
@@ -70,7 +69,13 @@
             "styles": [
               "projects/pdf-showreel/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -100,7 +105,8 @@
                 }
               ]
             }
-          }
+          },
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
