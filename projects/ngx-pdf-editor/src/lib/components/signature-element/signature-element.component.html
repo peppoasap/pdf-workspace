@@ -1,0 +1,19 @@
+<div #signature #signatureOverlayOrigin="cdkOverlayOrigin" cdkOverlayOrigin (click)="onClick()" (blur)="onBlur($event)"
+    tabindex="0"
+    class="border-pink-500 border-dashed border-2 w-48 h-14 text-center flex flex-col items-center justify-center font-medium">
+    <span>Firma</span>
+    <span>({{getNameFromSignerOrder(element.value)}})</span>
+</div>
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="signatureOverlayOrigin"
+    [cdkConnectedOverlayOpen]="isOverlayOpen">
+    <div class="h-auto shadow-md rounded-md w-auto flex flex-row items-center p-1 space-x-1 unfocusable z-50 bg-white">
+        <mat-radio-group class="unfocusable" tabindex="0" (change)="changeSigner($event.value)" [value]="element.value">
+            <mat-radio-button [value]="signer.order.toString()" class="unfocusable px-2"
+                *ngFor="let signer of element.props?.signers">{{signer.name}}</mat-radio-button>
+        </mat-radio-group>
+        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="deleteElement()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+</ng-template>

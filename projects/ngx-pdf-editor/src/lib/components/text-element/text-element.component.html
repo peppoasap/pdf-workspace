@@ -1,0 +1,22 @@
+<p [contentEditable]="contentEditable" #text #textOverlayOrigin="cdkOverlayOrigin" tabindex="0"
+    class="textElement z-10 outline-none border-opacity-0 border border-dashed focus:border-gray-500 focus:border-opacity-100"
+    (click)="onClick()" (dblclick)="onDoubleClick()" (blur)="onBlur($event)" cdkOverlayOrigin>Il tuo testo</p>
+
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="textOverlayOrigin"
+    [cdkConnectedOverlayOpen]="isStyleEditorOpen">
+    <div class="h-12 shadow-md rounded-md w-auto flex flex-row items-center p-1 space-x-1 unfocusable z-50 bg-white">
+        <!-- <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="setFontBold()">
+            <mat-icon>format_bold</mat-icon>
+        </button> -->
+        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="setFontSize(1)">
+            <mat-icon>text_increase</mat-icon>
+        </button>
+        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="setFontSize(-1)">
+            <mat-icon>text_decrease</mat-icon>
+        </button>
+        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="deleteElement()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+</ng-template>

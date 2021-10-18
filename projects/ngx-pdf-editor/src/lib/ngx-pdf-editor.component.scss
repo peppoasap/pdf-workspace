@@ -5,14 +5,12 @@
 
 .pdfElement{
     position: absolute;
-    padding: 8px;
+    padding: 2px;
 }
 
 .pdfElement:hover{
     cursor: grab;
 }
 
-.textElement[contenteditable="true"]:hover{
-    cursor: text !important;
-}
+
 

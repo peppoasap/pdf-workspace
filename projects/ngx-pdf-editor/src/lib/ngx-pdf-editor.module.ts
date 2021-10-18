@@ -10,12 +10,23 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PDFTextElement } from './components/text-element/text-element.component';
+import { ToolButtonComponent } from './components/tool-button/tool-button.component';
+import { PDFSignatureElement } from './components/signature-element/signature-element.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
 @NgModule({
   declarations: [
-    NgxPdfEditorComponent
+    NgxPdfEditorComponent,
+    PDFTextElement,
+    ToolButtonComponent,
+    PDFSignatureElement
   ],
   imports: [
     CommonModule,
@@ -23,6 +34,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatExpansionModule,
     MatButtonModule,
     MatIconModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatDialogModule,
     DragDropModule,
     OverlayModule,
     PortalModule,

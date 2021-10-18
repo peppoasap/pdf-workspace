@@ -1,10 +1,10 @@
+import { ComponentPortal, DomPortalOutlet, Portal } from "@angular/cdk/portal";
+import { ComponentRef } from "@angular/core";
 import { PDFPageProxy } from "ng2-pdf-viewer";
-import { PageViewport } from "pdfjs-dist/types/display/display_utils";
 
 export interface EditorConfig {
     title?: string;
     file?: File;
-
 }
 
 export interface RenderedPage {
@@ -12,7 +12,9 @@ export interface RenderedPage {
     error: string | null,
     pageNumber: number,
     source: PDFPageView,
-    timestamp: number
+    timestamp: number,
+    portalOutlet: DomPortalOutlet,
+    viewport: PageViewport
 }
 
 
@@ -27,46 +29,81 @@ export interface PDFPageView {
     viewport: PageViewport
 }
 
+// Clone of the pdfjs-dist lib PageViewport Class
+export interface PageViewport {
+    viewBox: number[];
+    scale: number;
+    rotation: number;
+    offsetX: number;
+    offsetY: number;
+    transform: number[];
+    width: number;
+    height: number;
+}
+
 export class Editor {
-    tools: EditorBasicTools = EDITOR_BASIC_TOOLS;
+    tools: EditorTool[] = [];
     selectedTool: EditorTool | null = null;
-    elements: PDFElement[] = [];
-    currentElement: PDFElement | null = null;
+    elements: PDFElement<any>[] = [];
+    pdf: string | null = null;
+    pages: RenderedPage[] = [];
+    selectedPage: number = 1;
+    viewportScale: number = 1;
+    filename: string = "my-pdf";
 }
 
-export interface EditorTool {
-    id: number;
-    type: string;
-    name: string;
-    icon: string;
-    callback: (event: MouseEvent) => void;
-    props: any | null;
-}
+export class EditorTool {
+    static count = 0;
+    id: number = EditorTool.count++;
+    type!: string;
+    name!: string;
+    icon!: string;
+    callback!: (event: MouseEvent) => void;
 
-
-
-export interface PDFElement {
-    id: number,
-    width: string;
-    height: string;
-    x: string;
-    y: string;
-    type: string;
-    elementRef: HTMLElement;
-    parent: HTMLDivElement,
-}
-
-export interface EditorBasicTools {
-    textField: EditorTool;
-}
-
-export const EDITOR_BASIC_TOOLS = {
-    textField: {
-        id: 0,
-        type: 'text',
-        name: 'Text',
-        icon: 'text_fields',
-        callback: () => { },
-        props: null
+    constructor(_type: string, _name: string, _icon: string, _action: (event: MouseEvent) => void) {
+        this.type = _type;
+        this.name = _name;
+        this.icon = _icon;
+        this.callback = _action;
     }
+}
+
+// J is the props type, but is optional
+export interface PDFElement<T, J = {}> {
+    id: number,
+    value: string,
+    width: string,
+    height: string,
+    x: string,
+    y: string,
+    page: number,
+    type: string,
+    parent: HTMLDivElement,
+    componentRef: ComponentRef<PDFElementHost<T>>,
+    componentPortal: ComponentPortal<T>,
+    render: boolean,
+    fontSize: string,
+    props?: J
+}
+
+export type PDFElementJSON = Omit<PDFElement<any>, 'componentRef' | 'componentPortal' | 'parent' | 'width' | 'height' | 'x' | 'y' | 'fontSize'> & {
+    width: number,
+    height: number,
+    x: number,
+    y: number,
+    fontSize: number
+}
+
+export interface PDFElementHost<T> {
+    element: PDFElement<T>,
+    left: string,
+    top: string,
+    export: (element: PDFElement<T>) => PDFElementJSON,
+    deleteElement: () => void
+}
+
+export interface PDFRenderResult {
+    pdf: string,
+    json: PDFElementJSON[],
+    filename: string
 }

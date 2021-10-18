@@ -1,0 +1,3 @@
+.textElement[contenteditable="true"]:hover{
+    cursor: text !important;
+}

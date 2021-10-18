@@ -35,5 +35,6 @@ export class AppComponent {
     config.data = editorConfig;
 
     this.matDialog.open(NgxPdfEditorComponent, config);
+    targetIfExsist ? targetIfExsist.value = "" : null;
   }
 }
