@@ -1,5 +1,5 @@
-<div class="w-14 h-14 shadow-sm border border-gray-300 rounded-md flex flex-col items-center justify-center cursor-pointer"
-    [ngClass]="{'bg-gray-100 hover:bg-gray-50' : selectedTool?.id === tool.id, 'hover:bg-gray-100' : selectedTool?.id !== tool.id}">
-    <mat-icon class="text-xl w-auto h-auto">{{tool.icon}}</mat-icon>
-    <p class="text-sm">{{tool.name}}</p>
+<div class="pdf-editor-w-20 pdf-editor-h-16 pdf-editor-shadow-sm pdf-editor-border pdf-editor-border-gray-300 pdf-editor-rounded-md pdf-editor-flex pdf-editor-flex-col pdf-editor-items-center pdf-editor-justify-center pdf-editor-cursor-pointer"
+    [ngClass]="{'pdf-editor-bg-blue-200' : selectedTool?.id === tool.id, 'hover:pdf-editor-bg-blue-200' : selectedTool?.id !== tool.id}">
+    <mat-icon class="pdf-editor-text-xl pdf-editor-w-auto pdf-editor-h-auto">{{tool.icon}}</mat-icon>
+    <p class="pdf-editor-text-sm">{{tool.name}}</p>
 </div>

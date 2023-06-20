@@ -1,45 +1,52 @@
-<div class="flex w-full h-full p-0">
+<div class="pdf-editor-flex pdf-editor-w-full pdf-editor-h-full pdf-editor-p-0 pdf-editor-bg-white">
 
-    <div class="w-1/5 h-full border-r border-solid flex flex-col pr-2 space-y-4" #toolside>
-        <h2 class="text-lg font-semibold">{{editorConfig.title}}</h2>
-        <div class="flex flex-col text-xl space-y-1">
-            <p class="font-medium">Nome:</p>
+    <div class="pdf-editor-w-2/12 pdf-editor-h-full pdf-editor-border-r pdf-editor-border-solid pdf-editor-flex pdf-editor-flex-col pdf-editor-p-4 pdf-editor-space-y-4"
+        #toolside>
+        <h2 class="pdf-editor-text-lg pdf-editor-font-semibold">{{editorConfig.title}}</h2>
+        <div class="pdf-editor-flex pdf-editor-flex-col pdf-editor-text-xl pdf-editor-space-y-1">
+            <p class="pdf-editor-font-medium">Nome:</p>
             <p contenteditable="true"
-                class="p-1 outline-none border border-dashed  border-gray-300 cursor-text break-words"
+                class="pdf-editor-p-1 pdf-editor-outline-none pdf-editor-border pdf-editor-border-dashed  pdf-editor-border-gray-300 pdf-editor-cursor-text pdf-editor-break-words"
                 (input)="changeName($event.target.innerHTML)">
                 {{editorConfig.file?.name || editor.filename}}</p>
         </div>
-        <mat-divider></mat-divider>
-        <div class="flex flex-row flex-wrap">
-            <editor-tool-button class="p-1" *ngFor="let tool of editor.tools" [tool]="tool"
+
+        <div
+            class="pdf-editor-w-full pdf-editor-h-0.5 pdf-editor-border-b pdf-editor-border-solid pdf-editor-border-gray-300 pdf-editor-my-1">
+        </div>
+
+        <div class="pdf-editor-flex pdf-editor-flex-row pdf-editor-flex-wrap">
+            <editor-tool-button class="pdf-editor-p-1" *ngFor="let tool of editor.tools" [tool]="tool"
                 [selectedTool]="editor.selectedTool" (click)="pdfEditorService.toggleTool(tool)"></editor-tool-button>
         </div>
-        <mat-divider></mat-divider>
+
+        <div
+            class="pdf-editor-w-full pdf-editor-h-0.5 pdf-editor-border-b pdf-editor-border-solid pdf-editor-border-gray-300 pdf-editor-my-1">
+        </div>
 
         <button mat-button (click)="render()"
-            class="rounded bg-purple-600 text-white font-semibold shadow p-2">Salva</button>
-        <button mat-button class="rounded bg-red-500 text-white font-semibold shadow" matDialogClose>Chiudi</button>
+            class="pdf-editor-rounded pdf-editor-bg-purple-600 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow pdf-editor-p-2">Salva</button>
+        <button mat-button
+            class="pdf-editor-rounded pdf-editor-bg-red-500 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow"
+            matDialogClose>Chiudi</button>
 
 
     </div>
 
-    <div class="w-4/5 h-full flex flex-col pl-2" #pdfside>
-        <pdf-viewer *ngIf="editor.pdf" [src]="editor.pdf" [render-text]="true" [original-size]="true"
-            [fit-to-page]="true" [show-all]="false" (page-rendered)="pageRendered($event)"
-            [(page)]="editor.selectedPage" (after-load-complete)="pdfRenderCompleted = true"
-            class="block w-full h-full relative"></pdf-viewer>
+    <div class="pdf-editor-w-10/12 pdf-editor-h-full pdf-editor-flex pdf-editor-flex-col pdf-editor-bg-gray-50 pdf-editor-overflow-y-hidden"
+        #pdfside>
+        <ngx-extended-pdf-viewer *ngIf="editor.pdf" [src]="editor.pdf" useBrowserLocale="true"
+            class="pdf-editor-w-full pdf-editor-relative" [(page)]="editor.selectedPage" pageViewMode="single"
+            (pageRendered)="pageRendered($event)" (pagesLoaded)="pagesLoaded($event)"
+            [showBorders]="true"
+            [showToolbar]="true" [sidebarVisible]="true" [showSidebarButton]="false" [showOpenFileButton]="false"
+            [showPrintButton]="false" [showDownloadButton]="false" [showRotateButton]="false"
+            [showScrollingButton]="false" [showSpreadButton]="false" [showPropertiesButton]="false"
+            [showBookmarkButton]="false" [showUnverifiedSignatures]="true" [enableDragAndDrop]="false"
+            [handTool]="false" [textLayer]="false" [showZoomButtons]="false" [ignoreKeyboard]="true" zoom="page-actual"
+            #pdfViewerHost>
+        </ngx-extended-pdf-viewer>
 
-        <div class="flex flex-row h-10 items-center justify-center border-t border-solid border-gray-200 pt-1"
-            *ngIf="pdfRenderCompleted">
-            <mat-icon class="text-3xl cursor-pointer opacity-75 hover:opacity-100 h-full"
-                (click)="pdfEditorService.previousPage()">
-                chevron_left</mat-icon>
-            <p class="font-semibold text-2xl ml-2">{{editor.selectedPage}}/{{editor.pages.length}}</p>
-            <mat-icon class="text-3xl cursor-pointer opacity-75 hover:opacity-100 h-full"
-                (click)="pdfEditorService.nextPage()">
-                chevron_right
-            </mat-icon>
-        </div>
     </div>
 
 

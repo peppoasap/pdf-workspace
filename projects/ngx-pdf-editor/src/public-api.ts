@@ -7,6 +7,8 @@ export * from './lib/ngx-pdf-editor.component';
 export * from './lib/ngx-pdf-editor.module';
 export * from './lib/components/text-element/text-element.component';
 export * from './lib/components/signature-element/signature-element.component';
+export * from './lib/components/image-element/image-element.component';
+export * from './lib/components/form-textfield/form-textfield.component';
 export * from './lib/models/Editor';
 export * from './lib/models/Signature';
 

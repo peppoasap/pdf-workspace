@@ -1,21 +1,33 @@
 <p [contentEditable]="contentEditable" #text #textOverlayOrigin="cdkOverlayOrigin" tabindex="0"
-    class="textElement z-10 outline-none border-opacity-0 border border-dashed focus:border-gray-500 focus:border-opacity-100"
+    class="textElement pdf-editor-z-10 pdf-editor-outline-none pdf-editor-border-opacity-0 pdf-editor-border pdf-editor-border-dashed focus:pdf-editor-border-gray-500 focus:pdf-editor-border-opacity-100"
     (click)="onClick()" (dblclick)="onDoubleClick()" (blur)="onBlur($event)" cdkOverlayOrigin>Il tuo testo</p>
 
 
 <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="textOverlayOrigin"
     [cdkConnectedOverlayOpen]="isStyleEditorOpen">
-    <div class="h-12 shadow-md rounded-md w-auto flex flex-row items-center p-1 space-x-1 unfocusable z-50 bg-white">
+    <div
+        class="pdf-editor-h-12 pdf-editor-shadow-md pdf-editor-rounded-md pdf-editor-w-auto pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-p-1 pdf-editor-space-x-1 unfocusable pdf-editor-z-50 pdf-editor-bg-white">
         <!-- <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="setFontBold()">
             <mat-icon>format_bold</mat-icon>
         </button> -->
-        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="setFontSize(1)">
+        <button
+            class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable "
+            (click)="setFontSize(1)">
             <mat-icon>text_increase</mat-icon>
         </button>
-        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="setFontSize(-1)">
+        <button
+            class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable"
+            (click)="setFontSize(-1)">
             <mat-icon>text_decrease</mat-icon>
         </button>
-        <button class="font-bold rounded-md border border-solid text-lg p-1 unfocusable" (click)="deleteElement()">
+        <div
+            class="pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg p-1 unfocusable pdf-editor-space-x-1">
+            <p class="font-medium unfocusable">Colore</p>
+            <input type="color" class="unfocusable" (input)="changeTextColor($event)" [value]="textColor">
+        </div>
+        <button
+            class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable"
+            (click)="deleteElement()">
             <mat-icon>delete</mat-icon>
         </button>
     </div>

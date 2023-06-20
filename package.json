@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "npm run tw-build && ng serve",
+    "build": "npm run tw-build && ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "tw-build": "npx tailwindcss-cli@latest build -o ./projects/ngx-pdf-editor/src/lib/tailwind.scss"
   },
   "private": true,
   "dependencies": {
@@ -21,10 +22,9 @@
     "@angular/platform-browser": "~12.2.9",
     "@angular/platform-browser-dynamic": "~12.2.9",
     "@angular/router": "~12.2.9",
-    "@types/pdfjs-dist": "^2.7.5",
-    "ng2-pdf-viewer": "^7.0.1",
+    "ngx-extended-pdf-viewer": "^11.0.0-alpha.7",
     "pdf-lib": "^1.16.0",
-    "rxjs": "~6.6.0",
+    "rxjs": "^7.4.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },

@@ -64,7 +64,12 @@
             "tsConfig": "projects/pdf-showreel/tsconfig.app.json",
             "assets": [
               "projects/pdf-showreel/src/favicon.ico",
-              "projects/pdf-showreel/src/assets"
+              "projects/pdf-showreel/src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
               "projects/pdf-showreel/src/styles.scss"

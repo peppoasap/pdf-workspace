@@ -1,0 +1,27 @@
+<input type="text" #textfield #textOverlayOrigin="cdkOverlayOrigin" tabindex="0" name="input"
+    class="pdf-editor-z-10 pdf-editor-outline-none pdf-editor-p-2 pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-border-black focus:pdf-editor-border-gray-600 focus:pdf-editor-border-opacity-100 pdf-editor-cursor-move"
+    (click)="onClick()" (dblclick)="onDoubleClick()" (blur)="onBlur($event)" cdkOverlayOrigin [placeholder]="textfield.name"
+    readonly />
+
+
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="textOverlayOrigin"
+    [cdkConnectedOverlayOpen]="isStyleEditorOpen">
+    <div
+        class="pdf-editor-h-12 pdf-editor-shadow-md pdf-editor-rounded-md pdf-editor-w-auto pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-p-1 pdf-editor-space-x-1 unfocusable pdf-editor-z-50 pdf-editor-bg-white">
+        <div
+            class="pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-rounded-md pdf-editor-text-lg pdf-editor-p-1 unfocusable pdf-editor-space-x-2">
+            <p class="font-medium unfocusable">Nome campo</p>
+            <input type="text" class="unfocusable pdf-editor-border pdf-editor-border-solid pdf-editor-p-1" (input)="changeInputName($event)" [value]="textfield.name">
+        </div>
+        <div
+            class="pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-rounded-md pdf-editor-text-lg pdf-editor-p-1 unfocusable pdf-editor-space-x-2">
+            <p class="font-medium unfocusable">Obbligatorio</p>
+            <input type="checkbox"  class="unfocusable" (input)="changeRequired($event)" [checked]="element.props?.required">
+        </div>
+        <button
+            class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable"
+            (click)="deleteElement()">
+            <mat-icon>delete</mat-icon>
+        </button>
+    </div>
+</ng-template>

@@ -1,6 +1,5 @@
-import { ComponentPortal, DomPortalOutlet, Portal } from "@angular/cdk/portal";
+import { ComponentPortal, ComponentType, DomPortalOutlet } from "@angular/cdk/portal";
 import { ComponentRef } from "@angular/core";
-import { PDFPageProxy } from "ng2-pdf-viewer";
 
 export interface EditorConfig {
     title?: string;
@@ -9,10 +8,8 @@ export interface EditorConfig {
 
 export interface RenderedPage {
     cssTransform: boolean,
-    error: string | null,
     pageNumber: number,
     source: PDFPageView,
-    timestamp: number,
     portalOutlet: DomPortalOutlet,
     viewport: PageViewport
 }
@@ -22,7 +19,7 @@ export interface PDFPageView {
     canvas: HTMLCanvasElement,
     div: HTMLDivElement,
     id: number,
-    pdfPage: PDFPageProxy,
+    pdfPage: any,
     renderer: string,
     renderingId: string,
     scale: number,
@@ -44,12 +41,14 @@ export interface PageViewport {
 export class Editor {
     tools: EditorTool[] = [];
     selectedTool: EditorTool | null = null;
-    elements: PDFElement<any>[] = [];
+    elements: PDFElement<any, any>[] = [];
     pdf: string | null = null;
     pages: RenderedPage[] = [];
+    pagesData: any[] = [];
     selectedPage: number = 1;
     viewportScale: number = 1;
     filename: string = "my-pdf";
+    mouseTracker: ComponentRef<any> | null = null;
 }
 
 export class EditorTool {
@@ -59,12 +58,14 @@ export class EditorTool {
     name!: string;
     icon!: string;
     callback!: (event: MouseEvent) => void;
+    mouseTrackerType!: ComponentType<any>;
 
-    constructor(_type: string, _name: string, _icon: string, _action: (event: MouseEvent) => void) {
+    constructor(_type: string, _name: string, _icon: string, _action: (event: MouseEvent) => void, _mouseTracker: ComponentType<any>) {
         this.type = _type;
         this.name = _name;
         this.icon = _icon;
         this.callback = _action;
+        this.mouseTrackerType = _mouseTracker;
     }
 }
 
@@ -79,14 +80,15 @@ export interface PDFElement<T, J = {}> {
     page: number,
     type: string,
     parent: HTMLDivElement,
-    componentRef: ComponentRef<PDFElementHost<T>>,
+    componentRef: ComponentRef<PDFElementHost<T, J>>,
     componentPortal: ComponentPortal<T>,
     render: boolean,
     fontSize: string,
+    textColor: string
     props?: J
 }
 
-export type PDFElementJSON = Omit<PDFElement<any>, 'componentRef' | 'componentPortal' | 'parent' | 'width' | 'height' | 'x' | 'y' | 'fontSize'> & {
+export type PDFElementJSON<J = {}>  = Omit<PDFElement<any, J>, 'componentRef' | 'componentPortal' | 'parent' | 'width' | 'height' | 'x' | 'y' | 'fontSize'> & {
     width: number,
     height: number,
     x: number,
@@ -94,11 +96,11 @@ export type PDFElementJSON = Omit<PDFElement<any>, 'componentRef' | 'componentPo
     fontSize: number
 }
 
-export interface PDFElementHost<T> {
-    element: PDFElement<T>,
+export interface PDFElementHost<T, J = {}> {
+    element: PDFElement<T, J>,
     left: string,
     top: string,
-    export: (element: PDFElement<T>) => PDFElementJSON,
+    export: (element: PDFElement<T, J>) => PDFElementJSON<J>,
     deleteElement: () => void
 }
 

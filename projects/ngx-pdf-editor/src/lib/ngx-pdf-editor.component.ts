@@ -1,10 +1,8 @@
 import { DomPortalOutlet } from '@angular/cdk/portal';
-import { ApplicationRef, Component, ComponentFactoryResolver, Inject, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { ApplicationRef, Component, ComponentFactoryResolver, Inject, Injector, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PDFSignatureElement } from './components/signature-element/signature-element.component';
-import { PDFTextElement } from './components/text-element/text-element.component';
-import { Editor, EditorConfig, EditorTool, RenderedPage } from './models/Editor';
-import { SignatureElementProps, Signer } from './models/Signature';
+import { NgxExtendedPdfViewerComponent, NgxExtendedPdfViewerService, PageRenderedEvent, PagesLoadedEvent, pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
+import { Editor, EditorConfig, RenderedPage } from './models/Editor';
 import { NgxPdfEditorService } from './ngx-pdf-editor.service';
 
 @Component({
@@ -18,7 +16,9 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
 
   pdfRenderCompleted: boolean = false;
   editor!: Editor;
+  totalPagesNumber: number = 1;
 
+  @ViewChild('pdfViewerHost') pdfViewerHost!: NgxExtendedPdfViewerComponent;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public editorConfig: EditorConfig,
@@ -26,24 +26,16 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
     private _appRef: ApplicationRef,
     private _defInjector: Injector,
     public pdfEditorService: NgxPdfEditorService,
-    private dialogRef: MatDialogRef<NgxPdfEditorComponent>
+    private dialogRef: MatDialogRef<NgxPdfEditorComponent>,
+    private pdfViewerService: NgxExtendedPdfViewerService
   ) {
+    pdfDefaultOptions.doubleTapZoomFactor = "100%";
+
     if (editorConfig.file) {
       this.pdfEditorService.setPDF(editorConfig.file);
       this.editor = this.pdfEditorService.getEditor();
       this.editor.filename = editorConfig.file.name;
     }
-
-    //Add Listener to tools
-    // this.pdfEditorService.addTool(
-    //   new EditorTool('text',
-    //     'Testo',
-    //     'text_fields',
-    //     (event) => this.pdfEditorService.addElement<PDFTextElement>(PDFTextElement, event, undefined, undefined, true))
-    // );
-
-    // this.pdfEditorService.addTool(new EditorTool('signature', 'Firma', 'format_shapes', (event) => this.pdfEditorService.addElement<PDFSignatureElement, SignatureElementProps>(PDFSignatureElement, event, undefined, { signers: signersTest })));
-
   }
 
   ngOnInit(): void {
@@ -53,7 +45,8 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
     this.pdfEditorService.reset();
   }
 
-  pageRendered(page: any) {
+  pageRendered(page: PageRenderedEvent) {
+
     let pageRendered: RenderedPage = page as RenderedPage;
     pageRendered.viewport = pageRendered.source.viewport;
     if (pageRendered.pageNumber === 1) {
@@ -61,12 +54,28 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
     }
     pageRendered.portalOutlet = new DomPortalOutlet(pageRendered.source.div, this._componentFactoryResolver, this._appRef, this._defInjector, document);
     this.editor.pages.push(pageRendered);
-    console.log("PAGE", pageRendered);
 
     pageRendered.source.div.onclick = (event) => {
       console.log("EXEC. CLICK EVENT:", event);
-      this.editor.selectedTool?.callback(event);
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'CANVAS') {
+        this.editor.selectedTool?.callback(event);
+      } else {
+        this.pdfEditorService.unselectTool();
+      }
     }
+    
+    console.log("PAGE RENDERED", pageRendered);
+
+  }
+
+  pagesLoaded(event: PagesLoadedEvent){
+    this.totalPagesNumber = event.pagesCount;
+    this.pdfRenderCompleted = true;
+  }
+
+  getTotalPagesNumberArray() {
+    return Array(this.totalPagesNumber).fill(0).map((x, i) => i + 1);
   }
 
   render() {
@@ -80,5 +89,18 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
   changeName(name: string): void {
     this.editor.filename = name;
   }
+
+  makeItAbsolute(index: number) {
+    console.log("PAGE ABS:", index);
+    const pdfPreview = document.getElementById(`pdf-preview-${index}`);
+    if (pdfPreview) {
+      pdfPreview.firstElementChild?.classList.add('relative');
+    }
+  }
+
+  // addBlankPage() {
+  //   this.pdfRenderCompleted = false;
+  //   this.pdfEditorService.addBlankPage().then(() => console.log("BLANK PAGE ADDED."));
+  // }
 
 }

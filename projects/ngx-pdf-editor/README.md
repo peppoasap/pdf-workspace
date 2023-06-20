@@ -1,24 +1,51 @@
-# NgxPdfEditor
+# Ngx Pdf Editor
+## _Angular Customizable Pdf Editor_
+## Work in progress - Documentation not ready!
+[![Angular](https://img.shields.io/badge/%20-Angular%20Material-blue?style=for-the-badge&logo=angular)]()
+[![Lending Solution](https://img.shields.io/badge/Powered%20By-Lending%20Solution-ff69b4?style=for-the-badge)](https://www.lendingsolution.it)
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.14.
+### Require Angular 12+
 
-## Code scaffolding
+## Install
 
-Run `ng generate component component-name --project ngx-pdf-editor` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project ngx-pdf-editor`.
-> Note: Don't forget to add `--project ngx-pdf-editor` or else it will be added to the default project in your `angular.json` file. 
+```
+npm install ngx-pdf-editor
+```
 
-## Build
+## Configuration
+Import **NgxPdfEditorService** in constructor.
 
-Run `ng build ngx-pdf-editor` to build the project. The build artifacts will be stored in the `dist/` directory.
+Add Tool to Editor
+```ts
+this.pdfEditorService.addTool(
+      new EditorTool('text',
+        'Testo',
+        'text_fields',
+        (event) => this.pdfEditorService.addElement<PDFTextElement>(PDFTextElement, event, undefined, undefined, true),
+        PDFTextElement)
+    );
+```
 
-## Publishing
+## Basic Tools Included
+- PDFTextElement
+- PDFImageElement
+- PDFSignatureElement
 
-After building your library with `ng build ngx-pdf-editor`, go to the dist folder `cd dist/ngx-pdf-editor` and run `npm publish`.
+## Open Editor
+```ts
+const config: MatDialogConfig = new MatDialogConfig();
 
-## Running unit tests
+const editorConfig: EditorConfig = {
+      title: "Editor PDF",
+      file: {{yourFile}} (it must be a File object)
+    }
+    
+config.data = editorConfig;
 
-Run `ng test ngx-pdf-editor` to execute the unit tests via [Karma](https://karma-runner.github.io).
+this.matDialog.open(NgxPdfEditorComponent, config);
+```
 
-## Further help
+## License
+MIT
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+

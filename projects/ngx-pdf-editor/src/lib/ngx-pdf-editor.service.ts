@@ -1,7 +1,8 @@
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import { ComponentRef, Injectable } from '@angular/core';
-import { PDFDocument, rgb } from 'pdf-lib';
-import { Editor, EditorTool, PDFElement, PDFElementHost, PDFElementJSON } from './models/Editor';
+import { PageSizes, PDFDocument, PDFForm, PDFImage, RGB, rgb } from 'pdf-lib';
+import { Editor, EditorTool, PDFElement, PDFElementHost, PDFElementJSON, RenderedPage } from './models/Editor';
+import { FormTextFieldProps } from './models/Form';
 
 @Injectable({
   providedIn: 'root'
@@ -37,10 +38,12 @@ export class NgxPdfEditorService {
 
   nextPage(): void {
     this.editor.selectedPage === this.editor.pages.length ? this.editor.selectedPage = 1 : this.editor.selectedPage++;
+    this.toogleMouseTracker();
   }
 
   previousPage(): void {
     this.editor.selectedPage === 1 ? this.editor.selectedPage = this.editor.pages.length : this.editor.selectedPage--;
+    this.toogleMouseTracker();
   }
 
   getEditor(): Editor {
@@ -57,14 +60,62 @@ export class NgxPdfEditorService {
 
   toggleTool(tool: EditorTool): void {
     this.editor.selectedTool?.id !== tool.id ? this.editor.selectedTool = tool : this.editor.selectedTool = null;
+    this.toogleMouseTracker();
+  }
+
+  private getCurrentPage(){
+    return this.editor.pages.find(p => (p.pageNumber === this.editor.selectedPage)) as RenderedPage;
+  }
+
+  private toogleMouseTracker(): void {
+    if (this.editor.selectedTool) {
+      if (!this.editor.mouseTracker) {
+        const trackerPortal = new ComponentPortal(this.editor.selectedTool?.mouseTrackerType);
+        console.log(this.editor.pages);
+        const pagePortalOutlet = this.getCurrentPage().portalOutlet;
+        const outletElement = pagePortalOutlet.outletElement as HTMLElement;
+        this.editor.mouseTracker = pagePortalOutlet.attachComponentPortal(trackerPortal);
+        const mouseTrackerElement = (this.editor.mouseTracker.location.nativeElement as HTMLElement);
+        mouseTrackerElement.style.position = 'absolute';
+        mouseTrackerElement.style.opacity = '40%';
+        mouseTrackerElement.style.pointerEvents = "none";
+        outletElement.onmousemove = (ev: MouseEvent) => {
+          const target = ev.target as HTMLElement;
+          if (target.tagName === 'CANVAS') {
+            mouseTrackerElement.style.top = `${ev.offsetY}px`;
+            mouseTrackerElement.style.left = `${ev.offsetX}px`;
+          } else {
+            mouseTrackerElement.style.visibility = 'hidden';
+          }
+        };
+
+        outletElement.onmouseout = () => {
+          mouseTrackerElement.style.visibility = 'hidden';
+        };
+
+        outletElement.onmouseover = () => {
+          mouseTrackerElement.style.visibility = 'visible';
+        };
+
+      } else {
+        this.editor.mouseTracker.destroy();
+        this.editor.mouseTracker = null;
+        this.toogleMouseTracker();
+      }
+    } else {
+      this.editor.mouseTracker?.destroy();
+      this.editor.mouseTracker = null;
+    }
+
   }
 
   unselectTool(): void {
     this.editor.selectedTool = null;
+    this.toogleMouseTracker();
   }
 
   addElement<T, J = {}>(component: ComponentType<T>, event: MouseEvent, value?: string, props?: J, render?: boolean): void {
-    const currentPage = this.editor.pages[this.editor.selectedPage - 1];
+    const currentPage = this.getCurrentPage();
     const portal = new ComponentPortal(component);
     const element: PDFElement<T, J> = {
       id: NgxPdfEditorService.idCounter++,
@@ -76,10 +127,11 @@ export class NgxPdfEditorService {
       height: '',
       type: this.editor.selectedTool ? this.editor.selectedTool.type : 'undefined',
       parent: currentPage.source.div,
-      componentRef: ((currentPage.portalOutlet.attachComponentPortal(portal) as unknown) as ComponentRef<PDFElementHost<T>>),
+      componentRef: ((currentPage.portalOutlet.attachComponentPortal(portal) as unknown) as ComponentRef<PDFElementHost<T, J>>),
       componentPortal: portal,
       render: render ? render : false,
-      fontSize: "16px",
+      fontSize: '16px',
+      textColor: '#000000',
       props
     };
     element.width = `${element.componentRef.location.nativeElement.offsetWidth}px`;
@@ -117,8 +169,8 @@ export class NgxPdfEditorService {
     return { left: x, top: y };
   }
 
-  export<T, J = {}>(element: PDFElement<T, J>): PDFElementJSON {
-    const elementToJson: PDFElementJSON = {
+  export<T, J = {}>(element: PDFElement<T, J>): PDFElementJSON<J> {
+    const elementToJson: PDFElementJSON<J> = {
       id: element.id,
       value: element.value,
       width: this.pxStringToNumber(element.width),
@@ -128,7 +180,8 @@ export class NgxPdfEditorService {
       page: element.page,
       type: element.type,
       render: element.render,
-      fontSize: this.pxStringToNumber(element.fontSize),
+      fontSize: this.normalizeDimension(this.pxStringToNumber(element.fontSize)),
+      textColor: element.textColor,
       props: element.props
     }
     return elementToJson;
@@ -141,16 +194,42 @@ export class NgxPdfEditorService {
       const elementsJSON = this.editor.elements.map(el => el.componentRef.instance.export(el));
       const elementsToRender = elementsJSON.filter(el => el.render);
       console.log(elementsJSON);
-      elementsToRender.forEach(el => {
+      elementsToRender.forEach(async el => {
         const page = origin.getPage(el.page - 1);
-
-        page.drawText(el.value, {
-          x: el.x,
-          y: this.yToPdfOrigin(el.y, page.getHeight(), el.fontSize),
-          maxWidth: el.width,
-          color: rgb(0, 0, 0),
-          size: el.fontSize
-        });
+        const form = origin.getForm();
+        switch (el.type) {
+          case 'text':
+            page.drawText(el.value, {
+              x: el.x,
+              y: this.yToPdfOrigin(el.y, page.getHeight(), el.fontSize),
+              maxWidth: el.width,
+              color: this.HEXtoRGB(el.textColor),
+              size: el.fontSize
+            });
+            break;
+          case 'image':
+            console.log(el.value);
+            const img = await (el.value.includes('jpeg') ? origin.embedJpg(el.value) : origin.embedPng(el.value));
+            const scaled = img.scaleToFit(this.normalizeDimension(el.width), el.height);
+            page.drawImage(img, {
+              width: scaled.width,
+              height: scaled.height,
+              x: el.x,
+              y: this.yToPdfOrigin(el.y, page.getHeight(), this.normalizeDimension(scaled.height)),
+            })
+            break;
+            case 'textfield':
+              const field = form.createTextField(el.value);
+              (el.props as FormTextFieldProps).required ? field.enableRequired() : null;
+              field.addToPage(page, {
+                  x: el.x,
+                  y: this.yToPdfOrigin(el.y, page.getHeight(), el.height / 2),
+                  width: this.normalizeDimension(el.width),
+                  height: this.normalizeDimension(el.height),
+                  textColor: this.HEXtoRGB(el.textColor)
+              });
+              break;
+        }
       });
 
       return { pdf: await origin.saveAsBase64({ dataUri: true }), json: elementsJSON, filename: this.editor.filename }
@@ -165,6 +244,26 @@ export class NgxPdfEditorService {
     NgxPdfEditorService.idCounter = 0;
   }
 
+  // async addBlankPage() {
+  //   if (this.originalFile) {
+  //     const pdfbase64 = await this.toBase64(this.originalFile) as string;
+  //     const origin = await PDFDocument.load(pdfbase64);
+  //     origin.addPage(PageSizes.A4);
+  //     const newPdf = await origin.save();
+  //     this.originalFile = new File([newPdf], this.originalFile.name, { type: this.originalFile.type });
+  //     this.editor.pdf = await this.toBase64(this.originalFile) as string;
+  //   } else {
+  //     throw Error('No PDF found!')
+  //   }
+  // }
+
+
+  //FORM UTILS
+    getInputCounter(): number{
+      return this.editor.elements.filter(el => el.type === "textfield").length;
+    }
+
+
   //UTILS
   pxStringToNumber(cord: string): number {
     return Number.parseFloat(cord.replace('px', ''));
@@ -176,6 +275,14 @@ export class NgxPdfEditorService {
 
   normalizeDimension(dimension: number): number {
     return dimension / this.editor.viewportScale;
+  }
+
+  HEXtoRGB(hex: string): RGB {
+    const aRgbHex = hex.replace('#', '').match(/.{1,2}/g);
+    if (aRgbHex) {
+      return rgb(parseInt(aRgbHex[0], 16) / 255, parseInt(aRgbHex[1], 16) / 255, parseInt(aRgbHex[2], 16) / 255);
+    }
+    return rgb(0, 0, 0);
   }
 
 

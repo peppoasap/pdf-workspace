@@ -1,9 +1,6 @@
 import { DragDrop, DragRef } from '@angular/cdk/drag-drop';
-import { FlexibleConnectedPositionStrategy, Overlay, OverlayRef, RepositionScrollStrategy, ScrollDispatcher, ViewportRuler } from '@angular/cdk/overlay';
-import { CdkPortal, ComponentPortal } from '@angular/cdk/portal';
-import { AfterViewChecked, AfterViewInit, Component, ComponentRef, ElementRef, HostBinding, HostListener, Input, NgZone, OnChanges, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { element } from 'protractor';
-import { EditorTool, PDFElement, PDFElementHost, PDFElementJSON } from '../../models/Editor';
+import { Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import { PDFElement, PDFElementHost, PDFElementJSON } from '../../models/Editor';
 import { NgxPdfEditorService } from '../../ngx-pdf-editor.service';
 
 @Component({
@@ -19,6 +16,8 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
   @HostBinding('style.left') left = '0px';
   @HostBinding('style.top') top = '0px';
   @HostBinding('style.fontSize') fontSize = '16px';
+  @HostBinding('style.color') textColor = '#000000';
+
   // @HostBinding('style.fontWeight') fontWeight = 'normal';
 
   @ViewChild('text', { static: true }) text!: ElementRef<HTMLParagraphElement>;
@@ -61,10 +60,12 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
   }
 
   ngOnInit(): void {
-    this.left = this.element.x;
-    this.top = this.element.y;
-    this.initializeDrag();
-    setTimeout(() => this.onDoubleClick(), 10);
+    if (this.element) {
+      this.left = this.element.x;
+      this.top = this.element.y;
+      this.initializeDrag();
+      setTimeout(() => this.onDoubleClick(), 10);
+    }
     // this.onDoubleClick();
   }
 
@@ -77,7 +78,7 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
       this.isStyleEditorOpen = false;
     });
 
-    this.dragRef.ended.subscribe((_dragRef) => {
+    this.dragRef.ended.subscribe((_dragRef: any) => {
       this.ngxPdfEditorService.updatePosition<PDFTextElement>(this.element);
       _dragRef.source.reset();
       this.isStyleEditorOpen = true;
@@ -107,6 +108,12 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
   setFontSize(n: number) {
     this.fontSize = `${Number.parseInt(this.fontSize.replace('px', '')) + n}px`;
     this.element.fontSize = this.fontSize;
+  }
+
+  changeTextColor(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.textColor = target.value;
+    this.element.textColor = this.textColor;
   }
 
   deleteElement(): void {

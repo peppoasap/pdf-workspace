@@ -48,12 +48,14 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
   }
 
   ngOnInit(): void {
-    this.left = this.element.x;
-    this.top = this.element.y;
-    this.initializeDrag();
-    setTimeout(() => this.onClick(), 10);
-    if (this.element.props) {
-      this.element.value = this.element.props?.signers[0].order.toString();
+    if (this.element) {
+      this.left = this.element.x;
+      this.top = this.element.y;
+      this.initializeDrag();
+      setTimeout(() => this.onClick(), 10);
+      if (this.element.props) {
+        this.element.value = this.element.props?.signers[0].order.toString();
+      }
     }
   }
 
@@ -64,7 +66,7 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
       this.isOverlayOpen = false;
     });
 
-    this.dragRef.ended.subscribe((_dragRef) => {
+    this.dragRef.ended.subscribe((_dragRef: any) => {
       this.ngxPdfEditorService.updatePosition<PDFSignatureElement>(this.element);
       _dragRef.source.reset();
       this.isOverlayOpen = true;
@@ -77,7 +79,11 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
   }
 
   getNameFromSignerOrder(signerOrder: string) {
-    return this.element.props?.signers.find(signer => signer.order === Number.parseInt(signerOrder))?.name;
+    if (signerOrder) {
+      return this.element.props?.signers.find(signer => signer.order === Number.parseInt(signerOrder))?.name;
+    } else {
+      return null;
+    }
   }
 
   export(): PDFElementJSON {
