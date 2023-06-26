@@ -22,7 +22,7 @@
     "@angular/platform-browser": "~12.2.9",
     "@angular/platform-browser-dynamic": "~12.2.9",
     "@angular/router": "~12.2.9",
-    "ngx-extended-pdf-viewer": "^11.0.0-alpha.7",
+    "ngx-extended-pdf-viewer": "^16.2.16",
     "pdf-lib": "^1.16.0",
     "rxjs": "^7.4.0",
     "tslib": "^2.0.0",

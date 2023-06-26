@@ -1,6 +1,18 @@
 import { DragDrop, DragRef } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
-import { PDFElement, PDFElementHost, PDFElementJSON } from '../../models/Editor';
+import {
+  Component,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  PDFElement,
+  PDFElementHost,
+  PDFElementJSON,
+} from '../../models/Editor';
 import { NgxPdfEditorService } from '../../ngx-pdf-editor.service';
 
 @Component({
@@ -9,9 +21,11 @@ import { NgxPdfEditorService } from '../../ngx-pdf-editor.service';
   styleUrls: ['./text-element.component.css'],
   host: {
     class: 'pdfElement textElement',
-  }
+  },
 })
-export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
+export class PDFTextElement
+  implements OnInit, OnDestroy, PDFElementHost<PDFTextElement>
+{
   @Input() element!: PDFElement<PDFTextElement>;
   @HostBinding('style.left') left = '0px';
   @HostBinding('style.top') top = '0px';
@@ -30,9 +44,8 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
 
   constructor(
     private ngxPdfEditorService: NgxPdfEditorService,
-    private dragDrop: DragDrop,
-  ) {
-  }
+    private dragDrop: DragDrop
+  ) {}
 
   onClick() {
     this.isStyleEditorOpen = true;
@@ -69,6 +82,10 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
     // this.onDoubleClick();
   }
 
+  ngOnDestroy(): void {
+    this.dragRef ? this.dragRef.dispose() : null;
+    this.isStyleEditorOpen = false;
+  }
 
   private initializeDrag(): void {
     this.dragRef = this.dragDrop.createDrag(this.element.componentRef.location);
@@ -82,10 +99,8 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
       this.ngxPdfEditorService.updatePosition<PDFTextElement>(this.element);
       _dragRef.source.reset();
       this.isStyleEditorOpen = true;
-    })
+    });
   }
-
-
 
   private placeCaretAtEnd(): void {
     const selection = window.getSelection();
@@ -119,5 +134,4 @@ export class PDFTextElement implements OnInit, PDFElementHost<PDFTextElement> {
   deleteElement(): void {
     this.ngxPdfEditorService.deleteElement(this.element);
   }
-
 }

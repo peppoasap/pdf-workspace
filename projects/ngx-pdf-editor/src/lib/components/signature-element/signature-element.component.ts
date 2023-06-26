@@ -1,6 +1,17 @@
 import { DragDrop, DragRef } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, HostBinding, OnInit, ViewChild } from '@angular/core';
-import { PDFElement, PDFElementHost, PDFElementJSON } from '../../models/Editor';
+import {
+  Component,
+  ElementRef,
+  HostBinding,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import {
+  PDFElement,
+  PDFElementHost,
+  PDFElementJSON,
+} from '../../models/Editor';
 import { SignatureElementProps } from '../../models/Signature';
 import { NgxPdfEditorService } from '../../ngx-pdf-editor.service';
 
@@ -10,25 +21,25 @@ import { NgxPdfEditorService } from '../../ngx-pdf-editor.service';
   styleUrls: ['./signature-element.component.css'],
   host: {
     class: 'pdfElement signatureElement',
-  }
+  },
 })
-export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureElement>{
+export class PDFSignatureElement
+  implements OnInit, OnDestroy, PDFElementHost<PDFSignatureElement>
+{
   element!: PDFElement<PDFSignatureElement, SignatureElementProps>;
   @HostBinding('style.left') left = '0px';
   @HostBinding('style.top') top = '0px';
 
-  @ViewChild('signature', { static: true }) signature!: ElementRef<HTMLDivElement>;
+  @ViewChild('signature', { static: true })
+  signature!: ElementRef<HTMLDivElement>;
 
   dragRef!: DragRef;
   isOverlayOpen: boolean = false;
 
-
   constructor(
     private ngxPdfEditorService: NgxPdfEditorService,
     private dragDrop: DragDrop
-  ) {
-
-  }
+  ) {}
 
   onClick() {
     this.signature.nativeElement.focus();
@@ -36,7 +47,7 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
   }
 
   onBlur(event: FocusEvent) {
-    console.log("ON BLUR", event);
+    console.log('ON BLUR', event);
 
     const target = event.relatedTarget as HTMLElement;
     if (!target || !target.classList.contains('unfocusable')) {
@@ -59,6 +70,11 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
     }
   }
 
+  ngOnDestroy() {
+    this.dragRef ? this.dragRef.dispose() : null;
+    this.isOverlayOpen = false;
+  }
+
   private initializeDrag(): void {
     this.dragRef = this.dragDrop.createDrag(this.element.componentRef.location);
     this.dragRef.withBoundaryElement(this.element.parent);
@@ -67,7 +83,9 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
     });
 
     this.dragRef.ended.subscribe((_dragRef: any) => {
-      this.ngxPdfEditorService.updatePosition<PDFSignatureElement>(this.element);
+      this.ngxPdfEditorService.updatePosition<PDFSignatureElement>(
+        this.element
+      );
       _dragRef.source.reset();
       this.isOverlayOpen = true;
     });
@@ -80,7 +98,9 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
 
   getNameFromSignerOrder(signerOrder: string) {
     if (signerOrder) {
-      return this.element.props?.signers.find(signer => signer.order === Number.parseInt(signerOrder))?.name;
+      return this.element.props?.signers.find(
+        (signer) => signer.order === Number.parseInt(signerOrder)
+      )?.name;
     } else {
       return null;
     }
@@ -93,5 +113,4 @@ export class PDFSignatureElement implements OnInit, PDFElementHost<PDFSignatureE
   deleteElement(): void {
     this.ngxPdfEditorService.deleteElement(this.element);
   }
-
 }

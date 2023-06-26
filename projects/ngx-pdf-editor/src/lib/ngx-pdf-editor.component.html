@@ -1,53 +1,94 @@
-<div class="pdf-editor-flex pdf-editor-w-full pdf-editor-h-full pdf-editor-p-0 pdf-editor-bg-white">
-
-    <div class="pdf-editor-w-2/12 pdf-editor-h-full pdf-editor-border-r pdf-editor-border-solid pdf-editor-flex pdf-editor-flex-col pdf-editor-p-4 pdf-editor-space-y-4"
-        #toolside>
-        <h2 class="pdf-editor-text-lg pdf-editor-font-semibold">{{editorConfig.title}}</h2>
-        <div class="pdf-editor-flex pdf-editor-flex-col pdf-editor-text-xl pdf-editor-space-y-1">
-            <p class="pdf-editor-font-medium">Nome:</p>
-            <p contenteditable="true"
-                class="pdf-editor-p-1 pdf-editor-outline-none pdf-editor-border pdf-editor-border-dashed  pdf-editor-border-gray-300 pdf-editor-cursor-text pdf-editor-break-words"
-                (input)="changeName($event.target.innerHTML)">
-                {{editorConfig.file?.name || editor.filename}}</p>
-        </div>
-
-        <div
-            class="pdf-editor-w-full pdf-editor-h-0.5 pdf-editor-border-b pdf-editor-border-solid pdf-editor-border-gray-300 pdf-editor-my-1">
-        </div>
-
-        <div class="pdf-editor-flex pdf-editor-flex-row pdf-editor-flex-wrap">
-            <editor-tool-button class="pdf-editor-p-1" *ngFor="let tool of editor.tools" [tool]="tool"
-                [selectedTool]="editor.selectedTool" (click)="pdfEditorService.toggleTool(tool)"></editor-tool-button>
-        </div>
-
-        <div
-            class="pdf-editor-w-full pdf-editor-h-0.5 pdf-editor-border-b pdf-editor-border-solid pdf-editor-border-gray-300 pdf-editor-my-1">
-        </div>
-
-        <button mat-button (click)="render()"
-            class="pdf-editor-rounded pdf-editor-bg-purple-600 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow pdf-editor-p-2">Salva</button>
-        <button mat-button
-            class="pdf-editor-rounded pdf-editor-bg-red-500 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow"
-            matDialogClose>Chiudi</button>
-
-
+<div
+  class="pdf-editor-flex pdf-editor-w-full pdf-editor-h-full pdf-editor-p-0 pdf-editor-bg-white"
+>
+  <div
+    class="pdf-editor-w-2/12 pdf-editor-h-full pdf-editor-border-r pdf-editor-border-solid pdf-editor-flex pdf-editor-flex-col pdf-editor-p-4 pdf-editor-space-y-4"
+    #toolside
+  >
+    <h2 class="pdf-editor-text-lg pdf-editor-font-semibold">
+      {{ editorConfig.title }}
+    </h2>
+    <div
+      class="pdf-editor-flex pdf-editor-flex-col pdf-editor-text-xl pdf-editor-space-y-1"
+    >
+      <p class="pdf-editor-font-medium">Nome:</p>
+      <p
+        contenteditable="true"
+        class="pdf-editor-p-1 pdf-editor-outline-none pdf-editor-border pdf-editor-border-dashed pdf-editor-border-gray-300 pdf-editor-cursor-text pdf-editor-break-words"
+        (input)="changeName($event.target.innerHTML)"
+      >
+        {{ editorConfig.file?.name || editor.filename }}
+      </p>
     </div>
 
-    <div class="pdf-editor-w-10/12 pdf-editor-h-full pdf-editor-flex pdf-editor-flex-col pdf-editor-bg-gray-50 pdf-editor-overflow-y-hidden"
-        #pdfside>
-        <ngx-extended-pdf-viewer *ngIf="editor.pdf" [src]="editor.pdf" useBrowserLocale="true"
-            class="pdf-editor-w-full pdf-editor-relative" [(page)]="editor.selectedPage" pageViewMode="single"
-            (pageRendered)="pageRendered($event)" (pagesLoaded)="pagesLoaded($event)"
-            [showBorders]="true"
-            [showToolbar]="true" [sidebarVisible]="true" [showSidebarButton]="false" [showOpenFileButton]="false"
-            [showPrintButton]="false" [showDownloadButton]="false" [showRotateButton]="false"
-            [showScrollingButton]="false" [showSpreadButton]="false" [showPropertiesButton]="false"
-            [showBookmarkButton]="false" [showUnverifiedSignatures]="true" [enableDragAndDrop]="false"
-            [handTool]="false" [textLayer]="false" [showZoomButtons]="false" [ignoreKeyboard]="true" zoom="page-actual"
-            #pdfViewerHost>
-        </ngx-extended-pdf-viewer>
+    <div
+      class="pdf-editor-w-full pdf-editor-h-0.5 pdf-editor-border-b pdf-editor-border-solid pdf-editor-border-gray-300 pdf-editor-my-1"
+    ></div>
 
+    <div class="pdf-editor-flex pdf-editor-flex-row pdf-editor-flex-wrap">
+      <editor-tool-button
+        class="pdf-editor-p-1"
+        *ngFor="let tool of editor.tools"
+        [tool]="tool"
+        [selectedTool]="editor.selectedTool"
+        (click)="pdfEditorService.toggleTool(tool)"
+      ></editor-tool-button>
     </div>
 
+    <div
+      class="pdf-editor-w-full pdf-editor-h-0.5 pdf-editor-border-b pdf-editor-border-solid pdf-editor-border-gray-300 pdf-editor-my-1"
+    ></div>
 
+    <button
+      mat-button
+      (click)="render()"
+      class="pdf-editor-rounded pdf-editor-bg-purple-600 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow pdf-editor-p-2"
+    >
+      Salva
+    </button>
+    <button
+      mat-button
+      class="pdf-editor-rounded pdf-editor-bg-red-500 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow"
+      matDialogClose
+    >
+      Chiudi
+    </button>
+  </div>
+
+  <div
+    class="pdf-editor-w-10/12 pdf-editor-h-full pdf-editor-flex pdf-editor-flex-col pdf-editor-bg-gray-50 pdf-editor-overflow-y-hidden"
+    #pdfside
+  >
+    <ngx-extended-pdf-viewer
+      *ngIf="editor.pdf"
+      [src]="editor.pdf"
+      useBrowserLocale="true"
+      class="pdf-editor-w-full pdf-editor-relative"
+      [(page)]="editor.selectedPage"
+      pageViewMode="single"
+      (pageRendered)="pageRendered($event)"
+      (pagesLoaded)="pagesLoaded($event)"
+      [showBorders]="true"
+      [showToolbar]="true"
+      [sidebarVisible]="true"
+      [showSidebarButton]="false"
+      [showOpenFileButton]="false"
+      [showPrintButton]="false"
+      [showDownloadButton]="false"
+      [showRotateButton]="false"
+      [showScrollingButton]="false"
+      [showSpreadButton]="false"
+      [showPropertiesButton]="false"
+      [showUnverifiedSignatures]="true"
+      [enableDragAndDrop]="false"
+      [showEditor]="false"
+      [handTool]="false"
+      [textLayer]="false"
+      [showZoomButtons]="false"
+      [ignoreKeyboard]="true"
+      zoom="page-actual"
+      #pdfViewerHost
+    >
+    </ngx-extended-pdf-viewer>
+  </div>
 </div>
