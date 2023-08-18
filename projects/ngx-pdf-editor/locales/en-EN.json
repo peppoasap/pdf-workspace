@@ -1,0 +1,12 @@
+{
+  "PDFEDITOR": {
+    "Name": "Name:",
+    "Save": "Save",
+    "Close": "Close",
+    "YourText": "Your text",
+    "SelectSigner": "Select signer",
+    "Dimension": "Dimension",
+    "FieldName": "Field name",
+    "Required": "Required"
+  }
+}

@@ -11,7 +11,7 @@
     <div
       class="pdf-editor-flex pdf-editor-flex-col pdf-editor-text-xl pdf-editor-space-y-1"
     >
-      <p class="pdf-editor-font-medium">Nome:</p>
+      <p class="pdf-editor-font-medium">{{ "PDFEDITOR.Name" | translate }}</p>
       <p
         contenteditable="true"
         class="pdf-editor-p-1 pdf-editor-outline-none pdf-editor-border pdf-editor-border-dashed pdf-editor-border-gray-300 pdf-editor-cursor-text pdf-editor-break-words"
@@ -44,14 +44,14 @@
       (click)="render()"
       class="pdf-editor-rounded pdf-editor-bg-purple-600 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow pdf-editor-p-2"
     >
-      Salva
+      {{ "PDFEDITOR.Save" | translate }}
     </button>
     <button
       mat-button
       class="pdf-editor-rounded pdf-editor-bg-red-500 pdf-editor-text-white pdf-editor-font-semibold pdf-editor-shadow"
       matDialogClose
     >
-      Chiudi
+      {{ "PDFEDITOR.Close" | translate }}
     </button>
   </div>
 
@@ -62,7 +62,8 @@
     <ngx-extended-pdf-viewer
       *ngIf="editor.pdf"
       [src]="editor.pdf"
-      useBrowserLocale="true"
+      [useBrowserLocale]="true"
+      [language]="editorConfig.language"
       class="pdf-editor-w-full pdf-editor-relative"
       [(page)]="editor.selectedPage"
       pageViewMode="single"

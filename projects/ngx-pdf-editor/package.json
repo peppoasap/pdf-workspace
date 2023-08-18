@@ -9,6 +9,8 @@
     "pdf-lib": ">=1.16.0",
     "tailwindcss": ">=2.2.7",
     "ngx-extended-pdf-viewer": ">=15.2.2",
+    "@ngx-translate/core": ">=12.0.0",
+    "@ngx-translate/http-loader": ">=6.0.0",
     "rxjs": ">=7.4.0"
   },
   "dependencies": {

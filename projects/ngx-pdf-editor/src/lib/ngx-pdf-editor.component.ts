@@ -13,13 +13,13 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   NgxExtendedPdfViewerComponent,
-  NgxExtendedPdfViewerService,
   PageRenderedEvent,
   PagesLoadedEvent,
   pdfDefaultOptions,
 } from 'ngx-extended-pdf-viewer';
 import { Editor, EditorConfig, RenderedPage } from './models/Editor';
 import { NgxPdfEditorService } from './ngx-pdf-editor.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-pdf-editor',
@@ -40,8 +40,7 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
     private _appRef: ApplicationRef,
     private _defInjector: Injector,
     public pdfEditorService: NgxPdfEditorService,
-    private dialogRef: MatDialogRef<NgxPdfEditorComponent>,
-    private pdfViewerService: NgxExtendedPdfViewerService
+    private dialogRef: MatDialogRef<NgxPdfEditorComponent>
   ) {
     pdfDefaultOptions.doubleTapZoomFactor = '100%';
 

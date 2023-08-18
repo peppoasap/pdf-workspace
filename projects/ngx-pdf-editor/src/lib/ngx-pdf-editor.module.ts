@@ -19,8 +19,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { PDFImageElement } from './components/image-element/image-element.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PDFFormTextfieldElement } from './components/form-textfield/form-textfield.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-
+export function HttpLoaderFactory(httpClient: HttpClient) {
+  return new TranslateHttpLoader(httpClient, '/assets/locales/', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -29,7 +34,7 @@ import { PDFFormTextfieldElement } from './components/form-textfield/form-textfi
     ToolButtonComponent,
     PDFSignatureElement,
     PDFImageElement,
-    PDFFormTextfieldElement
+    PDFFormTextfieldElement,
   ],
   imports: [
     CommonModule,
@@ -44,10 +49,9 @@ import { PDFFormTextfieldElement } from './components/form-textfield/form-textfi
     DragDropModule,
     OverlayModule,
     PortalModule,
-    NgxExtendedPdfViewerModule
+    NgxExtendedPdfViewerModule,
+    TranslateModule,
   ],
-  exports: [
-    NgxPdfEditorComponent
-  ]
+  exports: [NgxPdfEditorComponent],
 })
-export class NgxPdfEditorModule { }
+export class NgxPdfEditorModule {}

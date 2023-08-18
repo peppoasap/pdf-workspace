@@ -1,22 +1,47 @@
-<div #signature #signatureOverlayOrigin="cdkOverlayOrigin" cdkOverlayOrigin (click)="onClick()" (blur)="onBlur($event)"
-    tabindex="0"
-    class="pdf-editor-border-pink-500 pdf-editor-border-dashed pdf-editor-border-2 pdf-editor-w-48 pdf-editor-h-14 pdf-editor-text-center pdf-editor-flex pdf-editor-flex-col pdf-editor-items-center pdf-editor-justify-center pdf-editor-font-medium">
-    <span>Firma</span>
-    <span>({{getNameFromSignerOrder(element?.value) || 'Seleziona firmatario'}})</span>
+<div
+  #signature
+  #signatureOverlayOrigin="cdkOverlayOrigin"
+  cdkOverlayOrigin
+  (click)="onClick()"
+  (blur)="onBlur($event)"
+  tabindex="0"
+  class="pdf-editor-border-pink-500 pdf-editor-border-dashed pdf-editor-border-2 pdf-editor-w-48 pdf-editor-h-14 pdf-editor-text-center pdf-editor-flex pdf-editor-flex-col pdf-editor-items-center pdf-editor-justify-center pdf-editor-font-medium"
+>
+  <span>Firma</span>
+  <span
+    >({{
+      getNameFromSignerOrder(element?.value) ||
+        ("PDFEDITOR.SelectSigner" | translate)
+    }})</span
+  >
 </div>
 
-<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="signatureOverlayOrigin"
-    [cdkConnectedOverlayOpen]="isOverlayOpen">
-    <div
-        class="pdf-editor-h-auto pdf-editor-shadow-md pdf-editor-rounded-md pdf-editor-w-auto pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-p-1 pdf-editor-space-x-1 unfocusable pdf-editor-z-50 pdf-editor-bg-white">
-        <mat-radio-group class="unfocusable" tabindex="0" (change)="changeSigner($event.value)" [value]="element.value">
-            <mat-radio-button [value]="signer.order.toString()" class="unfocusable pdf-editor-px-2"
-                *ngFor="let signer of element.props?.signers">{{signer.name}}</mat-radio-button>
-        </mat-radio-group>
-        <button
-            class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable"
-            (click)="deleteElement()">
-            <mat-icon>delete</mat-icon>
-        </button>
-    </div>
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="signatureOverlayOrigin"
+  [cdkConnectedOverlayOpen]="isOverlayOpen"
+>
+  <div
+    class="pdf-editor-h-auto pdf-editor-shadow-md pdf-editor-rounded-md pdf-editor-w-auto pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-p-1 pdf-editor-space-x-1 unfocusable pdf-editor-z-50 pdf-editor-bg-white"
+  >
+    <mat-radio-group
+      class="unfocusable"
+      tabindex="0"
+      (change)="changeSigner($event.value)"
+      [value]="element.value"
+    >
+      <mat-radio-button
+        [value]="signer.order.toString()"
+        class="unfocusable pdf-editor-px-2"
+        *ngFor="let signer of element.props?.signers"
+        >{{ signer.name }}</mat-radio-button
+      >
+    </mat-radio-group>
+    <button
+      class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable"
+      (click)="deleteElement()"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
 </ng-template>

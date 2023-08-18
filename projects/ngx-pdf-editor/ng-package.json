@@ -3,5 +3,6 @@
   "dest": "../../dist/ngx-pdf-editor",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "assets": ["locales"]
 }
