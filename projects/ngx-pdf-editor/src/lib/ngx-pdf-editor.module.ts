@@ -7,7 +7,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { OverlayModule } from '@angular/cdk/overlay';
 
 import { CommonModule } from '@angular/common';
-import { PortalModule } from '@angular/cdk/portal';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PDFTextElement } from './components/text-element/text-element.component';
 import { ToolButtonComponent } from './components/tool-button/tool-button.component';
@@ -16,12 +15,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatLegacyDialogModule } from '@angular/material/legacy-dialog';
 import { PDFImageElement } from './components/image-element/image-element.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PDFFormTextfieldElement } from './components/form-textfield/form-textfield.component';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { PortalModule } from '@angular/cdk/portal';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '/assets/locales/', '.json');
@@ -46,6 +47,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     MatInputModule,
     MatRadioModule,
     MatDialogModule,
+    MatLegacyDialogModule,
     DragDropModule,
     OverlayModule,
     PortalModule,

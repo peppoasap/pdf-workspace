@@ -19,7 +19,6 @@ import {
 } from 'ngx-extended-pdf-viewer';
 import { Editor, EditorConfig, RenderedPage } from './models/Editor';
 import { NgxPdfEditorService } from './ngx-pdf-editor.service';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-pdf-editor',
@@ -43,7 +42,7 @@ export class NgxPdfEditorComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<NgxPdfEditorComponent>
   ) {
     pdfDefaultOptions.doubleTapZoomFactor = '100%';
-
+    pdfDefaultOptions.annotationMode = 1;
     if (editorConfig.file) {
       this.pdfEditorService.setPDF(editorConfig.file);
       this.editor = this.pdfEditorService.getEditor();
