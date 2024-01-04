@@ -1,6 +1,6 @@
 {
   "name": "ngx-pdf-editor",
-  "version": "0.1.15-legacy",
+  "version": "0.1.16-legacy",
   "peerDependencies": {
     "@angular/common": ">=17.0.0",
     "@angular/core": ">=17.0.0",
