@@ -8,6 +8,7 @@ import { ComponentRef } from '@angular/core';
 export interface EditorConfig {
   title?: string;
   file?: File;
+  language?: string;
 }
 
 export interface RenderedPage {

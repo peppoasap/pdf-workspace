@@ -36,9 +36,7 @@
               "projects/ngx-pdf-editor/tsconfig.lib.json",
               "projects/ngx-pdf-editor/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -71,9 +69,7 @@
                 "output": "/assets/"
               }
             ],
-            "styles": [
-              "projects/pdf-showreel/src/styles.scss"
-            ],
+            "styles": ["projects/pdf-showreel/src/styles.scss"],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -116,18 +112,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "pdf-showreel:build"
+            "buildTarget": "pdf-showreel:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "pdf-showreel:build:production"
+              "buildTarget": "pdf-showreel:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "pdf-showreel:build"
+            "buildTarget": "pdf-showreel:build"
           }
         },
         "test": {
@@ -141,9 +137,7 @@
               "projects/pdf-showreel/src/favicon.ico",
               "projects/pdf-showreel/src/assets"
             ],
-            "styles": [
-              "projects/pdf-showreel/src/styles.scss"
-            ],
+            "styles": ["projects/pdf-showreel/src/styles.scss"],
             "scripts": []
           }
         },
@@ -155,9 +149,7 @@
               "projects/pdf-showreel/tsconfig.spec.json",
               "projects/pdf-showreel/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {
