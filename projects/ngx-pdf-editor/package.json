@@ -1,11 +1,11 @@
 {
   "name": "ngx-pdf-editor",
-  "version": "0.1.13-legacy",
+  "version": "0.1.16-legacy",
   "peerDependencies": {
-    "@angular/common": ">=13.0.0",
-    "@angular/core": ">=13.0.0",
-    "@angular/material": ">=13.0.0",
-    "@angular/cdk": ">=13.0.0",
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0",
+    "@angular/material": ">=17.0.0",
+    "@angular/cdk": ">=17.0.0",
     "pdf-lib": ">=1.16.0",
     "tailwindcss": ">=2.2.7",
     "ngx-extended-pdf-viewer": ">=15.2.2",

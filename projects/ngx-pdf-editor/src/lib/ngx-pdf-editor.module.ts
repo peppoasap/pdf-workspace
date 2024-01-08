@@ -15,7 +15,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatLegacyDialogModule } from '@angular/material/legacy-dialog';
 import { PDFImageElement } from './components/image-element/image-element.component';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PDFFormTextfieldElement } from './components/form-textfield/form-textfield.component';
@@ -47,7 +46,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     MatInputModule,
     MatRadioModule,
     MatDialogModule,
-    MatLegacyDialogModule,
     DragDropModule,
     OverlayModule,
     PortalModule,
