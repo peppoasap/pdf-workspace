@@ -55,6 +55,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/pdf-showreel",
             "index": "projects/pdf-showreel/src/index.html",
             "main": "projects/pdf-showreel/src/main.ts",

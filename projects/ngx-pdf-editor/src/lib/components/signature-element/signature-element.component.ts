@@ -44,6 +44,13 @@ export class PDFSignatureElement
   onClick() {
     this.signature.nativeElement.focus();
     this.isOverlayOpen = true;
+    setTimeout(() => {
+      const overlay = document.getElementById('signature-overlay');
+      if (overlay) {
+        const group = overlay.getElementsByTagName('select')[0];
+        (group as HTMLElement).click();
+      }
+    }, 200);
   }
 
   onBlur(event: FocusEvent) {

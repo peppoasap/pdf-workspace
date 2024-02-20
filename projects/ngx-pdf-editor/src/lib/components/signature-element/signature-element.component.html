@@ -22,21 +22,23 @@
   [cdkConnectedOverlayOpen]="isOverlayOpen"
 >
   <div
+    id="signature-overlay"
     class="pdf-editor-h-auto pdf-editor-shadow-md pdf-editor-rounded-md pdf-editor-w-auto pdf-editor-flex pdf-editor-flex-row pdf-editor-items-center pdf-editor-p-1 pdf-editor-space-x-1 unfocusable pdf-editor-z-50 pdf-editor-bg-white"
   >
-    <mat-radio-group
+    <select
       class="unfocusable"
-      tabindex="0"
-      (change)="changeSigner($event.value)"
+      (change)="changeSigner($event.target.value)"
       [value]="element.value"
     >
-      <mat-radio-button
-        [value]="signer.order.toString()"
-        class="unfocusable pdf-editor-px-2"
+      <option
+        class="unfocusable"
         *ngFor="let signer of element.props?.signers"
-        >{{ signer.name }}</mat-radio-button
+        [value]="signer.order.toString()"
+        [selected]="signer.order.toString() === element.value"
       >
-    </mat-radio-group>
+        {{ signer.name }}
+      </option>
+    </select>
     <button
       class="pdf-editor-font-bold pdf-editor-rounded-md pdf-editor-border pdf-editor-border-solid pdf-editor-text-lg pdf-editor-p-1 pdf-editor-flex pdf-editor-justify-center pdf-editor-items-center unfocusable"
       (click)="deleteElement()"

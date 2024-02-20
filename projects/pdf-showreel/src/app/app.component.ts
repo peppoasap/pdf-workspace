@@ -128,7 +128,6 @@ export class AppComponent {
     const editorConfig: EditorConfig = {
       title: 'Editor PDF',
       file: fileIfExsist ? fileIfExsist : undefined,
-      language: 'es-ES',
     };
 
     config.data = editorConfig;

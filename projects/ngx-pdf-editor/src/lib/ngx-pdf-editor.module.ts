@@ -22,7 +22,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { PortalModule } from '@angular/cdk/portal';
-
+import { MatSelectModule } from '@angular/material/select';
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient, '/assets/locales/', '.json');
 }
@@ -44,6 +44,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatRadioModule,
     MatDialogModule,
     DragDropModule,
